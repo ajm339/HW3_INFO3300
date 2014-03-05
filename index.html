@@ -1,0 +1,133 @@
+<html>
+	<head>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+		<style>
+			.center{text-anchor: middle; dominant-baseline: hanging;}
+			svg {border: solid black 1px;}
+			svg line{stroke:black;}
+		</style>
+	</head>
+
+	<body>
+
+		<!--PROBLEM 1-->
+		<p>Problem 1
+			<script>
+				var testScale = 
+					function(num){
+						var x1= -85;
+						var x2= 85;
+						var y1= 200;
+						var y2= 0;
+						var value = (y2-y1)/(x2-x1);
+						return num*value + Math.abs((y2-y1)/2);
+					};
+				var xScale1 = d3.scale.linear().domain([-85, 85]).range([200, 0]);
+			</script>
+		</p>
+		<!--PROBLEM 2-->
+		<p>Problem 2
+			<div class="findable"></div>
+			<div class="findable"></div>
+			<div class="findable"></div>
+
+			<script>
+				d3.selectAll('.findable').html("found").style('color', 'red');
+			</script>
+		</p>
+		<!--PROBLEM 3-->
+		<p>Problem 3
+			<div id="p3"></div>
+
+			<script>
+				var plot = d3.select('#p3');
+				var xScale3 = d3.scale.linear().domain([0, 9]).range([40, 280]);
+				var yScale3 = d3.scale.linear().domain([0, 80]).range([280, 40]);
+				var svg = plot.append('svg').attr("height", 300).attr("width", 300);
+				var circle1 = {x: xScale3(2), y: yScale3(4)};
+				var circle2 = {x: xScale3(1), y: yScale3(1)};
+				var rect1 = {x: xScale3(4), y: yScale3(15)};
+				var rect2 = {x: xScale3(9), y: yScale3(80)};
+				svg.append("circle").attr("cx", circle1.x).attr("cy", circle1.y).attr("r", 5);
+				svg.append("circle").attr("cx", circle2.x).attr("cy", circle2.y).attr("r", 5);
+				svg.append("rect").attr("x", rect1.x).attr("y", rect1.y).attr("width", 10).attr("height", 10);
+				svg.append("rect").attr("x", rect2.x).attr("y", rect2.y).attr("width", 10).attr("height", 10);
+				svg.append("line").attr("x1", xScale3(0)).attr("y1", yScale3(0)).attr("x2", xScale3(9)).attr("y2", yScale3(0));
+				svg.append("line").attr("x1", xScale3(0)).attr("y1", yScale3(0)).attr("x2", xScale3(0)).attr("y2", yScale3(80));
+
+				var all_circles = svg.selectAll("circle");
+				all_circles.attr("fill", "green");
+				all_circles.on('click', function(){ 
+					$(this).attr("fill", "blue");
+				});
+				var all_rectangles = svg.selectAll("rect");
+				all_rectangles.attr("fill", "green");
+				all_rectangles.on('click', function(){ 
+					$(this).attr("fill", "blue");
+				});
+			</script>
+		</p>
+
+		<!--PROBLEM 4-->
+		<p>Problem 4
+			<div id="p4A"></div>
+			<div id="p4B"></div>
+			<div id="p4C"></div>
+				<script>
+					var wordRanks = [{rank: 1, count: 15342397280, word: "of"},
+					{rank: 2, count: 7611765281, word: "in"},
+					{rank: 4, count: 11021132912, word: "and"},
+					{rank: 8, count: 3021925527, word: "for"},
+					{rank: 16, count: 1562321315, word: "at"},
+					{rank: 32, count: 746702714, word: "more"},
+					{rank: 64, count: 652703221, word: "its"},
+					{rank: 128, count: 186584246, word: "different"},
+					{rank: 256, count: 102237666, word: "light"},
+					{rank: 512, count: 44824164, word: "middle"},
+					{rank: 1024, count: 34340679, word: "additional"},
+					{rank: 2048, count: 11864923, word: "abandoned"},
+					{rank: 4096, count: 7506730, word: "motive"},
+					{rank: 8192, count: 10615754, word: "Die"},
+					{rank: 16384, count: 907890, word: "portrays"},
+					{rank: 32768, count: 226851, word: "Fundamentally"},
+					{rank: 65536, count: 144913, word: "dv"}];
+
+					//4A
+					var canvasA = d3.select('#p4A');
+					var xScale4A = d3.scale.linear().domain([1, 65536]).range([10,190]);
+					var yScale4A = d3.scale.linear().domain([15342397280, 144913]).range([10,190]);
+					var svg4A = canvasA.append("svg").attr('width', 200).attr('height', 200);
+
+					var thewordsA = svg4A.selectAll("text").data(wordRanks).enter().append("text");
+				    var printedwordsA = thewordsA.attr("x", function(w) { return xScale4A(w.rank); })
+				    .attr("y", function(w) { return yScale4A(w.count); })
+				    .text(function (w) { return w.word; } );
+				    console.log("Problem 4A: This visualization is not extremely useful.  The words are all jumbled up and not readable.  It does show the disparity between the highest occurring word and its closest rivals though.");
+
+				    //4B
+				    var canvasB = d3.select('#p4B');
+				    var xScale4B = d3.scale.linear().domain([Math.log(1), Math.log(65536)]).range([10,190]);
+					var yScale4B = d3.scale.linear().domain([Math.log(15342397280), Math.log(144913)]).range([10,190]);
+				    var svg4B = canvasB.append("svg").attr('width', 200).attr('height', 200);
+
+				    var thewordsB = svg4B.selectAll("text").data(wordRanks).enter().append("text");
+				    var printedwordsB = thewordsB.attr("x", function(w) { return xScale4B(Math.log(w.rank)); })
+				    .attr("y", function(w) { return yScale4B(Math.log(w.count)); })
+				    .text(function (w) { return w.word; } );
+				    console.log("Problem 4B: This visualization is more helpful than 4A because it is presented in a log scale rather than a linear scale which is more readable for such large data.");
+
+				    //4C
+				    var canvasC = d3.select('#p4C');
+				    var xScale4C = d3.scale.log().domain([1, 65536]).range([10,190]);
+					var yScale4C = d3.scale.log().domain([15342397280, 144913]).range([10,190]);
+				    var svg4C = canvasC.append("svg").attr('width', 200).attr('height', 200);
+				    var thewordsC = svg4C.selectAll("text").data(wordRanks).enter().append("text");
+				    var printedwordsC = thewordsC.attr("x", function(w) { return xScale4C(w.rank); })
+				    .attr("y", function(w) { return yScale4C(w.count); })
+				    .text(function (w) { return w.word; } );
+				</script>
+		</p>
+	</body>
+</html>
